@@ -98,6 +98,19 @@ If the space is lower than the set threshold, the service will issue a warning e
 low_space_threshold_mib: 10
 ....
 
+== Configure RESERVE_LOG_SPACE
+
+The ONTAP Mediator server by default installation creates a separate disk-space for the logs. This mounted disk has an available disk-space of *700MB* explicitly for logging purpose. This is done to prevent a DoS attack where an attacker can fill up the default disk space by flooding the logs.
+
+In order to disable this feature and use the default disk-space, change the value of `RESERVE_LOG_SPACE` from 1 to 0 in file `/opt/netapp/lib/ontap_mediator/tools/mediator_env` and restart mediator: 
+
+** cat /opt/netapp/lib/ontap_mediator/tools/mediator_env | grep "RESERVE_LOG_SPACE"
+    
+    RESERVE_LOG_SPACE=0
+
+** `systemctl restart ontap_mediator`
+
+To re-enable the feature, change the value from 0 to 1 and restart mediator. Note that this toggling does not purge existing logs. You should still have all previous logs updated to current state after toggling and restarting mediator.
 
 // 2021-04-21 ONTAPEX-133437
 // 2021-05-05 review comment in IDR-67
